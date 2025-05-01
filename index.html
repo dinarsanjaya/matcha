@@ -4,35 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>matchaaapvyy Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --matcha-light: #d8e4c8;
-            --matcha-medium: #b4c59e;
-            --matcha-dark: #8ba872;
-            --matcha-darker: #5c7348;
-            --matcha-darkest: #3a4a2e;
-            --background: #f7f9f2;
+            --matcha-light: #e8f5e9;
+            --matcha-medium: #c8e6c9;
+            --matcha-dark: #a5d6a7;
+            --matcha-darker: #81c784;
+            --matcha-darkest: #4caf50;
+            --background: #f8faf8;
+            --text-dark: #2e3a2e;
+            --text-light: #f8faf8;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: var(--background);
-            color: var(--matcha-darkest);
+            color: var(--text-dark);
             margin: 0;
             padding: 0;
+            line-height: 1.6;
         }
         
         header {
-            background: linear-gradient(135deg, var(--matcha-dark), var(--matcha-medium));
-            color: white;
+            background: linear-gradient(135deg, var(--matcha-darkest), var(--matcha-darker));
+            color: var(--text-light);
             text-align: center;
-            padding: 2rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 3rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://i.pinimg.com/originals/2f/60/6a/2f606ad14bf8581b8a4b2e6a5c6d6a3b.png') center/cover;
+            opacity: 0.1;
+            z-index: 0;
         }
         
         h1 {
             margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 3rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
             font-weight: 300;
+            font-style: italic;
+            margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
         }
         
         .container {
@@ -45,28 +77,28 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem 0;
+            padding: 3rem 0;
         }
         
         .circle-gallery {
             position: relative;
-            width: 500px;
-            height: 500px;
-            margin: 2rem auto;
+            width: 600px;
+            height: 600px;
+            margin: 3rem auto;
             max-width: 90vw;
             max-height: 90vw;
-            animation: moveCircle 10s infinite alternate ease-in-out;
+            animation: float 8s infinite alternate ease-in-out;
         }
         
-        @keyframes moveCircle {
+        @keyframes float {
             0% {
-                transform: translateX(0);
+                transform: translateY(0);
             }
             50% {
-                transform: translateX(50px);
+                transform: translateY(-20px);
             }
             100% {
-                transform: translateX(0);
+                transform: translateY(0);
             }
         }
         
@@ -74,38 +106,43 @@
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0s linear;
+            transition: transform 0.3s ease;
         }
         
         .thumbnail {
             position: absolute;
-            width: 80px;
-            height: 120px;
+            width: 100px;
+            height: 150px;
             object-fit: cover;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 3px solid var(--matcha-medium);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 4px solid white;
+            border-radius: 4px;
+            transform-origin: center;
+            filter: brightness(0.95);
         }
         
         .thumbnail:hover {
-            transform: scale(1.15);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border-color: var(--matcha-darker);
+            transform: scale(1.2) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            border-color: var(--matcha-medium);
             z-index: 10;
+            filter: brightness(1.05);
         }
         
         .modal {
             display: none;
             position: fixed;
-            z-index: 100;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
+            background-color: rgba(0,0,0,0.95);
             overflow: auto;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.4s ease-out;
+            backdrop-filter: blur(5px);
         }
         
         @keyframes fadeIn {
@@ -119,66 +156,204 @@
         
         .modal-content {
             display: block;
-            margin: 2% auto;
-            max-width: 90%;
-            max-height: 90vh;
+            margin: 5% auto;
+            max-width: 85%;
+            max-height: 85vh;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            animation: zoomIn 0.4s ease-out;
+        }
+        
+        @keyframes zoomIn {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         
         .close {
             position: absolute;
-            top: 20px;
-            right: 35px;
+            top: 30px;
+            right: 40px;
             color: var(--matcha-light);
-            font-size: 40px;
-            font-weight: bold;
+            font-size: 50px;
+            font-weight: 300;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            opacity: 0.8;
         }
         
         .close:hover {
             color: white;
+            transform: rotate(90deg);
+            opacity: 1;
         }
         
         .audio-container {
             text-align: center;
-            margin-top: 2rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 2rem auto;
         }
 
         .play-button {
-            background-color: var(--matcha-dark);
+            background: linear-gradient(135deg, var(--matcha-darkest), var(--matcha-darker));
             color: white;
             font-size: 18px;
-            padding: 1rem 2rem;
+            padding: 1rem 2.5rem;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
         .play-button:hover {
-            background-color: var(--matcha-medium);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .play-button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+        
+        .play-button:hover::after {
+            transform: translateX(0);
+        }
+        
+        .gallery-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--matcha-darkest);
+            font-size: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .gallery-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--matcha-dark), var(--matcha-medium));
+            border-radius: 3px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--matcha-darkest);
+            color: var(--text-light);
+            margin-top: 3rem;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            font-size: 0.9rem;
         }
         
         @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
             .circle-gallery {
-                width: 300px;
-                height: 300px;
+                width: 350px;
+                height: 350px;
             }
             
             .thumbnail {
-                width: 50px;
-                height: 75px;
+                width: 70px;
+                height: 105px;
             }
             
-            .circle-container {
-                animation: rotate 60s linear infinite;
+            .close {
+                top: 20px;
+                right: 25px;
+                font-size: 40px;
+            }
+            
+            .modal-content {
+                max-width: 95%;
+                margin: 10% auto;
             }
         }
         
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
+        /* Floating leaves decoration */
+        .leaf {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+            animation: floatLeaf 15s infinite linear;
+        }
+        
+        @keyframes floatLeaf {
+            0% {
+                transform: translateY(0) rotate(0deg);
             }
+            50% {
+                transform: translateY(-50px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+        
+        /* Loading animation */
+        .loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loader.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--matcha-medium);
+            border-top-color: var(--matcha-darkest);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
@@ -186,18 +361,38 @@
     </style>
 </head>
 <body>
+    <div class="loader active" id="loader">
+        <div class="spinner"></div>
+        <p>Loading matchaaapvyy memories...</p>
+    </div>
+    
     <header>
         <h1>matchaaapvyy Gallery</h1>
+        <div class="subtitle">A collection of sweet moments</div>
+        
+        <!-- Decorative leaves -->
+        <div class="leaf" style="top: 10%; left: 10%; width: 80px; height: 80px; animation-delay: 0s;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3069/3069172.png" alt="leaf" style="width:100%; height:100%;">
+        </div>
+        <div class="leaf" style="top: 70%; left: 80%; width: 60px; height: 60px; animation-delay: 2s;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3069/3069172.png" alt="leaf" style="width:100%; height:100%;">
+        </div>
+        <div class="leaf" style="top: 30%; left: 85%; width: 50px; height: 50px; animation-delay: 4s;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3069/3069172.png" alt="leaf" style="width:100%; height:100%;">
+        </div>
     </header>
     
     <!-- Embed Spotify Music -->
     <div class="audio-container">
-        <button class="play-button" id="play-button">Play Music</button>
-        <iframe id="audio-iframe" src="https://open.spotify.com/embed/track/5DqSZFvWvSWg5eyCDi0CuW?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="display:none;"></iframe>
+        <button class="play-button" id="play-button">
+            <span class="button-text">Play Background Music</span>
+        </button>
+        <iframe id="audio-iframe" src="https://open.spotify.com/embed/track/5DqSZFvWvSWg5eyCDi0CuW?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="display:none; border-radius:12px;"></iframe>
     </div>
 
     <div class="container">
         <div class="gallery-container">
+            <h2 class="gallery-title">Precious Moments</h2>
             <div class="circle-gallery" id="circle-gallery">
                 <div class="circle-container" id="circle-container">
                     <!-- Thumbnails will be dynamically added here -->
@@ -211,25 +406,71 @@
         <img class="modal-content" id="modal-image">
     </div>
     
+    <footer>
+        <div class="footer-text">© 2023 matchaaapvyy Gallery | Created with 💚</div>
+    </footer>
+    
     <script>
-        // Sample image data - replace with your actual images
+        // Enhanced image data with captions
         const images = [
-            { thumbnail: 'https://i.ibb.co.com/GQdZk3Hh/Snap-Insta-to-482328673-17953714748915482-5905561080196051421-n.jpg', full: 'https://i.ibb.co.com/GQdZk3Hh/Snap-Insta-to-482328673-17953714748915482-5905561080196051421-n.jpg', alt: ' 1' },
-            { thumbnail: 'https://i.pinimg.com/736x/88/c3/9c/88c39c7b7dc18e23d91c6f0d62d391a3.jpg', full: 'https://i.pinimg.com/736x/88/c3/9c/88c39c7b7dc18e23d91c6f0d62d391a3.jpg', alt: 'Matcha Ice Cream' },
-            { thumbnail: 'https://i.ibb.co.com/Mx1Sv4gT/Snap-Insta-to-471920331-918578400388488-6699858736808737099-n.jpg', full: 'https://i.ibb.co.com/Mx1Sv4gT/Snap-Insta-to-471920331-918578400388488-6699858736808737099-n.jpg', alt: ' 2' },
-            { thumbnail: 'https://i.pinimg.com/736x/ce/81/92/ce81924fb1fffe313c7c768cdb36018f.jpg', full:  'https://i.pinimg.com/736x/ce/81/92/ce81924fb1fffe313c7c768cdb36018f.jpg', alt: 'Matcha Latte' },
-            { thumbnail: 'https://i.ibb.co.com/QFxXZXFX/Snap-Insta-to-481984014-17953714775915482-6031278453580017730-n.jpg', full: 'https://i.ibb.co.com/QFxXZXFX/Snap-Insta-to-481984014-17953714775915482-6031278453580017730-n.jpg', alt: ' 3' },
-            { thumbnail: 'https://i.pinimg.com/736x/9c/67/b7/9c67b71ad4ca7756f09f6ff9c6fd1fb6.jpg', full: 'https://i.pinimg.com/736x/9c/67/b7/9c67b71ad4ca7756f09f6ff9c6fd1fb6.jpg', alt: 'Matcha Latte' },
-            { thumbnail: 'https://i.ibb.co.com/Ldr1RP5w/Snap-Insta-to-472028752-2071817226604318-2577813611776595252-n.jpg', full: 'https://i.ibb.co.com/Ldr1RP5w/Snap-Insta-to-472028752-2071817226604318-2577813611776595252-n.jpg', alt: ' 4' },
-            { thumbnail: 'https://i.pinimg.com/736x/e7/7c/4b/e77c4b6d104e9d83ce7364734eb0025c.jpg', full: 'https://i.pinimg.com/736x/e7/7c/4b/e77c4b6d104e9d83ce7364734eb0025c.jpg', alt: 'Matcha Latte' },
-            { thumbnail: 'https://i.ibb.co.com/5xTBS1vP/Snap-Insta-to-472031158-1265075118101727-2290158240692308637-n.jpg', full: 'https://i.ibb.co.com/5xTBS1vP/Snap-Insta-to-472031158-1265075118101727-2290158240692308637-n.jpg', alt: '7' },
-            
+            { thumbnail: 'https://i.ibb.co.com/GQdZk3Hh/Snap-Insta-to-482328673-17953714748915482-5905561080196051421-n.jpg', 
+              full: 'https://i.ibb.co.com/GQdZk3Hh/Snap-Insta-to-482328673-17953714748915482-5905561080196051421-n.jpg', 
+              alt: 'Beautiful moment 1',
+              caption: "Cherished memory from a special day" },
+              
+            { thumbnail: 'https://i.pinimg.com/736x/88/c3/9c/88c39c7b7dc18e23d91c6f0d62d391a3.jpg', 
+              full: 'https://i.pinimg.com/736x/88/c3/9c/88c39c7b7dc18e23d91c6f0d62d391a3.jpg', 
+              alt: 'Matcha Ice Cream',
+              caption: "Sweet treats for sweet moments" },
+              
+            { thumbnail: 'https://i.ibb.co.com/Mx1Sv4gT/Snap-Insta-to-471920331-918578400388488-6699858736808737099-n.jpg', 
+              full: 'https://i.ibb.co.com/Mx1Sv4gT/Snap-Insta-to-471920331-918578400388488-6699858736808737099-n.jpg', 
+              alt: 'Beautiful moment 2',
+              caption: "Laughter and joy captured forever" },
+              
+            { thumbnail: 'https://i.pinimg.com/736x/ce/81/92/ce81924fb1fffe313c7c768cdb36018f.jpg', 
+              full: 'https://i.pinimg.com/736x/ce/81/92/ce81924fb1fffe313c7c768cdb36018f.jpg', 
+              alt: 'Matcha Latte',
+              caption: "Warm moments in every sip" },
+              
+            { thumbnail: 'https://i.ibb.co.com/QFxXZXFX/Snap-Insta-to-481984014-17953714775915482-6031278453580017730-n.jpg', 
+              full: 'https://i.ibb.co.com/QFxXZXFX/Snap-Insta-to-481984014-17953714775915482-6031278453580017730-n.jpg', 
+              alt: 'Beautiful moment 3',
+              caption: "Sunshine and happiness" },
+              
+            { thumbnail: 'https://i.pinimg.com/736x/9c/67/b7/9c67b71ad4ca7756f09f6ff9c6fd1fb6.jpg', 
+              full: 'https://i.pinimg.com/736x/9c/67/b7/9c67b71ad4ca7756f09f6ff9c6fd1fb6.jpg', 
+              alt: 'Matcha Dessert',
+              caption: "Sweet endings to beautiful days" },
+              
+            { thumbnail: 'https://i.ibb.co.com/Ldr1RP5w/Snap-Insta-to-472028752-2071817226604318-2577813611776595252-n.jpg', 
+              full: 'https://i.ibb.co.com/Ldr1RP5w/Snap-Insta-to-472028752-2071817226604318-2577813611776595252-n.jpg', 
+              alt: 'Beautiful moment 4',
+              caption: "Together is our favorite place to be" },
+              
+            { thumbnail: 'https://i.pinimg.com/736x/e7/7c/4b/e77c4b6d104e9d83ce7364734eb0025c.jpg', 
+              full: 'https://i.pinimg.com/736x/e7/7c/4b/e77c4b6d104e9d83ce7364734eb0025c.jpg', 
+              alt: 'Matcha Tea Set',
+              caption: "Elegance in every detail" },
+              
+            { thumbnail: 'https://i.ibb.co.com/5xTBS1vP/Snap-Insta-to-472031158-1265075118101727-2290158240692308637-n.jpg', 
+              full: 'https://i.ibb.co.com/5xTBS1vP/Snap-Insta-to-472031158-1265075118101727-2290158240692308637-n.jpg', 
+              alt: 'Beautiful moment 5',
+              caption: "Memories that last a lifetime" }
         ];
         
-        // Shuffle the images array
-        images.sort(() => Math.random() - 0.5);
+        // Shuffle the images array for variety
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
         
-        // Function to arrange thumbnails in a circle
+        shuffleArray(images);
+        
+        // Function to arrange thumbnails in a circle with smooth animation
         function arrangeInCircle() {
             const circleContainer = document.getElementById('circle-container');
             const numImages = images.length;
@@ -239,37 +480,70 @@
             const centerX = galleryWidth / 2;
             const centerY = galleryHeight / 2;
             
-            const radius = Math.min(centerX, centerY) - 40; // Adjust for more space between thumbnails
+            const radius = Math.min(centerX, centerY) * 0.8;
+            
+            // Clear previous thumbnails
+            circleContainer.innerHTML = '';
             
             images.forEach((image, index) => {
                 const thumb = document.createElement('img');
                 thumb.src = image.thumbnail;
                 thumb.alt = image.alt;
                 thumb.className = 'thumbnail';
+                thumb.dataset.caption = image.caption;
                 
+                // Calculate position with slight randomness for organic feel
                 const angle = (index / numImages) * 2 * Math.PI;
-                const x = radius * Math.cos(angle) + centerX - 40;
-                const y = radius * Math.sin(angle) + centerY - 60;
+                const randomOffset = 0.9 + Math.random() * 0.2;
+                const x = radius * Math.cos(angle) * randomOffset + centerX - 50;
+                const y = radius * Math.sin(angle) * randomOffset + centerY - 75;
+                
                 thumb.style.left = `${x}px`;
                 thumb.style.top = `${y}px`;
                 
+                // Add slight rotation for variety
+                const rotation = -15 + Math.random() * 30;
+                thumb.style.transform = `rotate(${rotation}deg)`;
+                
+                // Add animation delay for staggered entrance
+                thumb.style.animationDelay = `${index * 0.1}s`;
+                
                 thumb.addEventListener('click', () => {
-                    openModal(image.full, image.alt);
+                    openModal(image.full, image.alt, image.caption);
                 });
                 
                 circleContainer.appendChild(thumb);
             });
+            
+            // Hide loader after images are arranged
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('active');
+            }, 1000);
         }
         
-        // Modal functionality
+        // Enhanced Modal functionality
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modal-image');
         const closeBtn = document.getElementsByClassName('close')[0];
         
-        function openModal(src, alt) {
+        function openModal(src, alt, caption) {
             modal.style.display = 'block';
             modalImg.src = src;
             modalImg.alt = alt;
+            
+            // Add caption if it doesn't exist
+            if (!document.getElementById('modal-caption')) {
+                const captionElement = document.createElement('div');
+                captionElement.id = 'modal-caption';
+                captionElement.style.textAlign = 'center';
+                captionElement.style.color = 'white';
+                captionElement.style.marginTop = '15px';
+                captionElement.style.fontSize = '1.2rem';
+                captionElement.style.fontFamily = "'Playfair Display', serif";
+                modal.appendChild(captionElement);
+            }
+            
+            document.getElementById('modal-caption').textContent = caption;
         }
         
         closeBtn.onclick = function() {
@@ -282,17 +556,52 @@
             }
         }
         
-        // Play button functionality
+        // Play button functionality with enhanced feedback
         const playButton = document.getElementById('play-button');
         const audioIframe = document.getElementById('audio-iframe');
         
-        playButton.onclick = function() {
-            audioIframe.style.display = 'block'; // Display the iframe and start playing the music
-            playButton.disabled = true; // Disable the button after it has been clicked
-        };
+        playButton.addEventListener('click', function() {
+            audioIframe.style.display = 'block';
+            playButton.innerHTML = '<span class="button-text">Music Playing...</span>';
+            playButton.style.background = 'linear-gradient(135deg, var(--matcha-darker), var(--matcha-dark))';
+            
+            // Add a small icon
+            const musicIcon = document.createElement('span');
+            musicIcon.innerHTML = ' 🎵';
+            playButton.appendChild(musicIcon);
+            
+            // Disable button after click
+            playButton.disabled = true;
+        });
         
-        // Initialize the gallery when the page loads
-        document.addEventListener('DOMContentLoaded', arrangeInCircle);
+        // Handle window resize for responsive layout
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                arrangeInCircle();
+            }, 250);
+        });
+        
+        // Initialize the gallery when all assets are loaded
+        window.addEventListener('load', function() {
+            arrangeInCircle();
+            
+            // Add floating leaves to the gallery container
+            const gallery = document.getElementById('circle-gallery');
+            for (let i = 0; i < 5; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.style.width = `${30 + Math.random() * 50}px`;
+                leaf.style.height = leaf.style.width;
+                leaf.style.left = `${Math.random() * 100}%`;
+                leaf.style.top = `${Math.random() * 100}%`;
+                leaf.style.animationDelay = `${Math.random() * 5}s`;
+                leaf.style.animationDuration = `${10 + Math.random() * 20}s`;
+                leaf.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/3069/3069172.png" alt="leaf" style="width:100%; height:100%;">';
+                gallery.appendChild(leaf);
+            }
+        });
     </script>
 </body>
 </html>
