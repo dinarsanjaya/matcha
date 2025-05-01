@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@matchaaapvyy Gallery</title>
+    <title>Matcha Photo Gallery</title>
     <style>
         :root {
             --matcha-light: #d8e4c8;
@@ -167,9 +167,14 @@
 </head>
 <body>
     <header>
-        <h1>@matchaaapvyy Gallery</h1>
+        <h1>Matcha Photo Gallery</h1>
     </header>
     
+    <!-- Embed YouTube Music -->
+    <div class="audio-container">
+        <iframe width="0" height="0" src="https://www.youtube.com/embed/tq3JwQiDmlM?autoplay=1&loop=1&playlist=tq3JwQiDmlM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
     <div class="container">
         <div class="gallery-container">
             <div class="circle-gallery" id="circle-gallery">
@@ -203,40 +208,40 @@
             
         ];
         
+        // Shuffle the images array
+        images.sort(() => Math.random() - 0.5);
+        
         // Function to arrange thumbnails in a circle
         function arrangeInCircle() {
-        const circleContainer = document.getElementById('circle-container');
-        const numImages = images.length;
-        const circleGallery = document.getElementById('circle-gallery');
-        const galleryWidth = circleGallery.offsetWidth;
-        const galleryHeight = circleGallery.offsetHeight;
-        const centerX = galleryWidth / 2;
-        const centerY = galleryHeight / 2;
-        
-        // Increase the radius to spread out the images more
-        const radius = Math.min(centerX, centerY) - 20; // Adjust for more space between thumbnails
-        
-        images.forEach((image, index) => {
-            const thumb = document.createElement('img');
-            thumb.src = image.thumbnail;
-            thumb.alt = image.alt;
-            thumb.className = 'thumbnail';
+            const circleContainer = document.getElementById('circle-container');
+            const numImages = images.length;
+            const circleGallery = document.getElementById('circle-gallery');
+            const galleryWidth = circleGallery.offsetWidth;
+            const galleryHeight = circleGallery.offsetHeight;
+            const centerX = galleryWidth / 2;
+            const centerY = galleryHeight / 2;
             
-            // Calculate position in circle
-            const angle = (index / numImages) * 2 * Math.PI;
-            const x = radius * Math.cos(angle) + centerX - 40; // Adjust X position for thumbnail width
-            const y = radius * Math.sin(angle) + centerY - 60; // Adjust Y position for thumbnail height
-            thumb.style.left = `${x}px`;
-            thumb.style.top = `${y}px`;
+            const radius = Math.min(centerX, centerY) - 80; // Adjust for more space between thumbnails
             
-            // Add click event
-            thumb.addEventListener('click', () => {
-                openModal(image.full, image.alt);
+            images.forEach((image, index) => {
+                const thumb = document.createElement('img');
+                thumb.src = image.thumbnail;
+                thumb.alt = image.alt;
+                thumb.className = 'thumbnail';
+                
+                const angle = (index / numImages) * 2 * Math.PI;
+                const x = radius * Math.cos(angle) + centerX - 40;
+                const y = radius * Math.sin(angle) + centerY - 60;
+                thumb.style.left = `${x}px`;
+                thumb.style.top = `${y}px`;
+                
+                thumb.addEventListener('click', () => {
+                    openModal(image.full, image.alt);
+                });
+                
+                circleContainer.appendChild(thumb);
             });
-            
-            circleContainer.appendChild(thumb);
-        });
-    }
+        }
         
         // Modal functionality
         const modal = document.getElementById('imageModal');
