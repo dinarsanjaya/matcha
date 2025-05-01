@@ -395,7 +395,7 @@
             <button class="control-button" id="play-pause-button">▶</button>
             <button class="control-button" id="next-button">⏭</button>
         </div>
-        <div class="song-info" id="song-info">Now Playing: Relaxing Matcha Music</div>
+        <div class="song-info" id="song-info">Now Playing: Loading music...</div>
     </div>
 
     <div class="container">
@@ -422,12 +422,21 @@
     <iframe id="youtube-player" src="https://www.youtube.com/embed/?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
     
     <script>
-        // YouTube Music Playlist
+        // Mixed Music Playlist (Hindia + Perunggu + other Indonesian indie)
         const songs = [
-            { id: "5qap5aO4i9A", title: "Lofi Hip Hop Radio" },
-            { id: "jfKfPfyJRdk", title: "Chill Lofi Beats" },
-            { id: "DWcJFNfaw9c", title: "Relaxing Matcha Music" },
-            { id: "7NOSDKb0HlU", title: "Japanese Zen Garden" }
+            // Hindia songs
+            { id: "fmOEKOjyDxU", title: "Hindia - Evaluasi" },
+            { id: "TKY0Vow0Wq4", title: "Hindia - Secukupnya" },
+            { id: "6wXpM6QK5kI", title: "Hindia - Belum Tidur" },
+            
+            // Perunggu songs
+            { id: "zWXW7nUfW8g", title: "Perunggu - Langit Tak Mendengar" },
+            { id: "5Q9E7z9nMgQ", title: "Perunggu - Masa Depan" },
+            
+            // Other Indonesian indie
+            { id: "2X7A0R7jSs8", title: "Banda Neira - Untuk Perempuan..." },
+            { id: "JzSuVwXmG1E", title: "Dialog Senja - Ambyar" },
+            { id: "QmUJssQqQk4", title: "Fourtwnty - Aku Tenang" }
         ];
         
         let currentSongIndex = 0;
@@ -447,11 +456,21 @@
         // When player is ready
         function onPlayerReady(event) {
             loadSong(currentSongIndex);
-            // Start playing automatically (may be blocked by browser autoplay policies)
+            // Try to start playing automatically (may require user interaction in some browsers)
             event.target.playVideo();
             isPlaying = true;
             updatePlayPauseButton();
             document.getElementById('song-info').textContent = `Now Playing: ${songs[currentSongIndex].title}`;
+            
+            // Add click event to document to enable audio on user interaction
+            document.addEventListener('click', function enableAudio() {
+                if (!isPlaying) {
+                    player.playVideo();
+                    isPlaying = true;
+                    updatePlayPauseButton();
+                }
+                document.removeEventListener('click', enableAudio);
+            });
         }
 
         // Handle player state changes
