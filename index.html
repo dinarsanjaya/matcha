@@ -205,41 +205,38 @@
             margin: 2rem auto;
         }
 
-        .play-button {
-            background: linear-gradient(135deg, var(--matcha-darkest), var(--matcha-darker));
-            color: white;
-            font-size: 18px;
-            padding: 1rem 2.5rem;
-            border: none;
-            cursor: pointer;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
-            font-weight: 600;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
+        .music-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
-        .play-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+        .control-button {
+            background: linear-gradient(135deg, var(--matcha-darkest), var(--matcha-darker));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
         }
-        
-        .play-button::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
-            transform: translateX(-100%);
-            transition: transform 0.4s ease;
+
+        .control-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         }
-        
-        .play-button:hover::after {
-            transform: translateX(0);
+
+        .song-info {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: var(--matcha-darkest);
+            font-style: italic;
         }
         
         .gallery-title {
@@ -358,6 +355,16 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Hidden YouTube player */
+        #youtube-player {
+            position: fixed;
+            top: -1000px;
+            left: -1000px;
+            width: 1px;
+            height: 1px;
+            visibility: hidden;
+        }
     </style>
 </head>
 <body>
@@ -382,12 +389,13 @@
         </div>
     </header>
     
-    <!-- Embed Spotify Music -->
+    <!-- Music Controls -->
     <div class="audio-container">
-        <button class="play-button" id="play-button">
-            <span class="button-text">Play Background Music</span>
-        </button>
-        <iframe id="audio-iframe" src="https://open.spotify.com/embed/track/5DqSZFvWvSWg5eyCDi0CuW?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="display:none; border-radius:12px;"></iframe>
+        <div class="music-control">
+            <button class="control-button" id="play-pause-button">▶</button>
+            <button class="control-button" id="next-button">⏭</button>
+        </div>
+        <div class="song-info" id="song-info">Now Playing: Relaxing Matcha Music</div>
     </div>
 
     <div class="container">
@@ -410,7 +418,92 @@
         <div class="footer-text">© 2025 matchaaapvyy Gallery | Created with 💚</div>
     </footer>
     
+    <!-- YouTube iframe player (hidden) -->
+    <iframe id="youtube-player" src="https://www.youtube.com/embed/?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
+    
     <script>
+        // YouTube Music Playlist
+        const songs = [
+            { id: "5qap5aO4i9A", title: "Lofi Hip Hop Radio" },
+            { id: "jfKfPfyJRdk", title: "Chill Lofi Beats" },
+            { id: "DWcJFNfaw9c", title: "Relaxing Matcha Music" },
+            { id: "7NOSDKb0HlU", title: "Japanese Zen Garden" }
+        ];
+        
+        let currentSongIndex = 0;
+        let player;
+        let isPlaying = false;
+
+        // Load YouTube API
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // When player is ready
+        function onPlayerReady(event) {
+            loadSong(currentSongIndex);
+            // Start playing automatically (may be blocked by browser autoplay policies)
+            event.target.playVideo();
+            isPlaying = true;
+            updatePlayPauseButton();
+            document.getElementById('song-info').textContent = `Now Playing: ${songs[currentSongIndex].title}`;
+        }
+
+        // Handle player state changes
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                playNextSong();
+            }
+        }
+
+        // Load a song by index
+        function loadSong(index) {
+            if (player) {
+                player.loadVideoById(songs[index].id);
+                document.getElementById('song-info').textContent = `Now Playing: ${songs[index].title}`;
+            }
+        }
+
+        // Play next song
+        function playNextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) {
+                player.playVideo();
+            }
+        }
+
+        // Toggle play/pause
+        function togglePlayPause() {
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+            isPlaying = !isPlaying;
+            updatePlayPauseButton();
+        }
+
+        // Update play/pause button icon
+        function updatePlayPauseButton() {
+            document.getElementById('play-pause-button').textContent = isPlaying ? '⏸' : '▶';
+        }
+
+        // Set up button event listeners
+        document.getElementById('play-pause-button').addEventListener('click', togglePlayPause);
+        document.getElementById('next-button').addEventListener('click', playNextSong);
+
+        // Load YouTube API script
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
         // Enhanced image data with captions
         const images = [
             { thumbnail: 'https://i.ibb.co.com/GQdZk3Hh/Snap-Insta-to-482328673-17953714748915482-5905561080196051421-n.jpg', 
@@ -555,24 +648,6 @@
                 modal.style.display = 'none';
             }
         }
-        
-        // Play button functionality with enhanced feedback
-        const playButton = document.getElementById('play-button');
-        const audioIframe = document.getElementById('audio-iframe');
-        
-        playButton.addEventListener('click', function() {
-            audioIframe.style.display = 'block';
-            playButton.innerHTML = '<span class="button-text">Music Playing...</span>';
-            playButton.style.background = 'linear-gradient(135deg, var(--matcha-darker), var(--matcha-dark))';
-            
-            // Add a small icon
-            const musicIcon = document.createElement('span');
-            musicIcon.innerHTML = ' 🎵';
-            playButton.appendChild(musicIcon);
-            
-            // Disable button after click
-            playButton.disabled = true;
-        });
         
         // Handle window resize for responsive layout
         let resizeTimer;
